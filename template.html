@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><?php echo getSetting('site_title'); ?></title>
+
+
+  <!-- Bootstrap pirmas, kad styles.css prireikus jį užgožtų -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="icon" href="image/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap">
+
+  <!-- SEO -->
+  <meta name="description" content="NightRiders – automobilių entuziastų bendruomenė ir parduotuvė: drabužiai, kepurės, galerija ir kontaktai.">
+  <meta name="keywords" content="NightRiders, automobilių klubas, drabužiai, kepurės, galerija, kontaktai, Vilnius">
+  <link rel="canonical" href="https://chimerical-dieffenbachia-16c9c5.netlify.app">
+  <meta property="og:title" content="NightRiders">
+  <meta property="og:description" content="Automobilių entuziastų bendruomenė ir parduotuvė.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://chimerical-dieffenbachia-16c9c5.netlify.app/image/logo.png">
+  <meta property="og:url" content="https://chimerical-dieffenbachia-16c9c5.netlify.app">
+
+  <!-- Struktūrizuoti duomenys -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NightRiders",
+    "url": "https://chimerical-dieffenbachia-16c9c5.netlify.app",
+    "logo": "https://chimerical-dieffenbachia-16c9c5.netlify.app/image/logo.png",
+    "sameAs": ["https://instagram.com/nightriders.lt"]
+  }
+  </script>
+</head>
+<body>
+<!-- laikmatis: skraidantis valdiklis apatiniame dešiniajame kampe -->
+<div id="timer-widget" class="timer-widget" role="region" aria-label="laikrodis" aria-live="polite">
+  <div id="timer-text" class="timer-text">—:—:—</div>
+  <div class="timer-controls">
+    <button id="timer-stop" class="timer-btn" type="button" aria-label="sustabdyti laikrodį">Sustabdyti</button>
+    <button id="timer-start" class="timer-btn" type="button" aria-label="paleisti laikrodį iš naujo" disabled>Paleisti</button>
+  </div>
+</div>
+<!-- mygtukas laikmačio rodymui / slėpimui -->
+<button id="toggleTimer" class="toggle-timer-btn" aria-expanded="true" aria-controls="timer-widget" title="slėpti / rodyti laikmatį">🕒</button>
+
+  <!-- greitas perėjimas klaviatūra -->
+  <a class="skip-link" href="#maincontent">Pereiti prie turinio</a>
+
+  <!-- viršutinė juosta -->
+  <header class="topbar">
+    <div class="inner">
+      <!-- mobilus meniu mygtukas -->
+      <button class="menu-toggle" aria-label="atidaryti meniu" aria-expanded="false" aria-controls="mainnav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- logotipas -->
+      <a class="logo overlap" href="#hero" aria-label="pagrindinis">
+        <img src="image/logo.png" alt="NightRiders logotipas">
+      </a>
+
+      <!-- pagrindinis meniu -->
+      <nav id="mainnav" class="mainnav" aria-label="pagrindinis meniu">
+        <a href="#hero">PRADINIS</a>
+        <a href="#shop" class="active">PARDUOTUVĖ</a>
+        <a href="#about">APIE MUS</a>
+        <a href="#contacts">KONTAKTAI</a>
+      </nav>
+
+      <!-- paieška -->
+      <form class="search" role="search" action="#">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <label for="q" class="visually-hidden">ieškoti</label>
+        <input id="q" name="q" type="search" placeholder="Ieškoti parduotuvėje">
+      </form>
+
+      <!-- veiksmai (krepšelis, paskyra, prieinamumas, kalba) -->
+      <div class="actions">
+        <button id="cartBtn" class="icon-btn" title="krepšelis" aria-label="krepšelis">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"></circle><circle cx="20" cy="20" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </button>
+        <span class="sep" aria-hidden="true"></span>
+        <button id="loginBtn" class="icon-btn" title="paskyra" aria-label="paskyra">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </button>
+
+        <span class="sep" aria-hidden="true"></span>
+
+        <!-- prieinamumo mygtukai -->
+<!-- prieinamumas: pagrindinis mygtukas + išskleidžiamas meniu -->
+<div class="a11y">
+  <button
+    id="a11yToggle"
+    class="icon-btn a11y-trigger"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls="a11yMenu"
+    title="prieinamumo nustatymai"
+    aria-label="prieinamumo nustatymai">
+    ♿
+  </button>
+
+  <div id="a11yMenu" class="a11y-menu" hidden>
+    <button id="toggleTheme" class="a11y-btn" title="tamsus / šviesus režimas">🌗</button>
+    <button id="incFont" class="a11y-btn" title="padidinti tekstą">A+</button>
+    <button id="decFont" class="a11y-btn" title="sumažinti tekstą">A−</button>
+  </div>
+</div>
+
+
+        <span class="sep" aria-hidden="true"></span>
+        <div class="lang">
+          <span class="flag lt" aria-hidden="true"></span>
+          <span aria-hidden="true">LT</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- užtemdymas šoniniams skydeliams -->
+  <div class="drawer-scrim" hidden></div>
+
+  <!-- pagrindinis turinys -->
+  <main id="maincontent">
+    <!-- hero -->
+    <section id="hero" class="hero" aria-label="hero">
+      <video autoplay muted loop playsinline poster="image/galerija1.png">
+        <source src="image/Animacija.mp4" type="video/mp4">
+      </video>
+      <div class="overlay"></div>
+    </section>
+
+    <!-- apie mus -->
+    <section id="about" class="section pad">
+      <div class="grid-2">
+        <div>
+          <h2 class="title-underline">Apie mus</h2>
+<p>{{about_text}}</p>
+
+          <ul class="nr-list">
+            <li>Reguliarūs susitikimai ir renginiai</li>
+            <li>Foto / video galerijos</li>
+            <li>Draugiška bendruomenė</li>
+          </ul>
+          <ol class="steps">
+            <li>Prisijunk prie mūsų susitikimo</li>
+            <li>Sek @nightriders.lt</li>
+            <li>Įsigyk atributikos mūsų parduotuvėje</li>
+          </ol>
+          <img class="card-img" src="image/masinos.png" alt="NightRiders susitikimas aikštelėje">
+        </div>
+        <div>
+          <img class="card-img" src="image/masinos2.jpg" alt="Automobiliai naktį">
+          <h2 class="title-underline">Mūsų tikslas</h2>
+          <p>Skatinti bendruomeniškumą ir automobilių kultūrą Lietuvoje bei už jos ribų.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- galerija (bootstrap karuselė) -->
+    <section id="gallery" class="section pad light" aria-label="galerija">
+      <h2 class="section-title">GALERIJA</h2>
+
+      <div id="bsGallery" class="carousel slide container my-3" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#bsGallery" data-bs-slide-to="0" class="active" aria-current="true" aria-label="1"></button>
+          <button type="button" data-bs-target="#bsGallery" data-bs-slide-to="1" aria-label="2"></button>
+          <button type="button" data-bs-target="#bsGallery" data-bs-slide-to="2" aria-label="3"></button>
+        </div>
+        <div class="carousel-inner rounded-4">
+          <div class="carousel-item active">
+            <img src="image/galerija2.png" class="d-block w-100" alt="Galerija 1">
+          </div>
+          <div class="carousel-item">
+            <img src="image/masinos2.jpg" class="d-block w-100" alt="Galerija 2">
+          </div>
+          <div class="carousel-item">
+            <img src="image/masinos.png" class="d-block w-100" alt="Galerija 3">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#bsGallery" data-bs-slide="prev" aria-label="ankstesnis">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#bsGallery" data-bs-slide="next" aria-label="kitas">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- mūsų prekės -->
+    <section id="shop" class="section pad">
+      <h2 class="section-title">MŪSŲ PREKĖS</h2>
+
+      <div class="container">
+        <div class="row g-4 mt-2">
+          <!-- marškinėliai -->
+          <article class="col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+              <img
+                src="image/maikesP.png"
+                class="card-img-top prod-img-shirt"
+                alt="NightRiders maikutė"
+                data-front="image/maikesP.png"
+                data-back="image/maikesG.png">
+              <div class="card-body">
+                <h5 class="card-title fw-bold">DRABUŽIAI</h5>
+                <p class="card-text">NightRiders maikutė</p>
+                <button class="btn btn-dark rounded-pill px-4 add-to-cart"
+                        data-id="shirt" data-name="NightRiders maikutė"
+                        data-price="19.99" data-img="image/maikesP.png">
+                  Į krepšelį
+                </button>
+              </div>
+              <div class="card-footer fw-bold">19,99€</div>
+            </div>
+          </article>
+
+          <!-- kepurė juoda -->
+          <article class="col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+              <img src="image/kepureJ.png" class="card-img-top prod-img" alt="NightRiders kepurė juoda">
+              <div class="card-body">
+                <h5 class="card-title fw-bold">KEPURĖS</h5>
+                <p class="card-text">NightRiders kepurė (juoda)</p>
+                <button class="btn btn-dark rounded-pill px-4 add-to-cart"
+                        data-id="cap-black" data-name="NightRiders kepurė (juoda)"
+                        data-price="14.99" data-img="image/kepureJ.png">
+                  Į krepšelį
+                </button>
+              </div>
+              <div class="card-footer fw-bold">14,99€</div>
+            </div>
+          </article>
+
+          <!-- kepurė balta -->
+          <article class="col-md-4">
+            <div class="card h-100 shadow-sm text-center">
+              <img src="image/kepureB.png" class="card-img-top prod-img" alt="NightRiders kepurė balta">
+              <div class="card-body">
+                <h5 class="card-title fw-bold">KEPURĖS</h5>
+                <p class="card-text">NightRiders kepurė (balta)</p>
+                <button class="btn btn-dark rounded-pill px-4 add-to-cart"
+                        data-id="cap-white" data-name="NightRiders kepurė (balta)"
+                        data-price="14.99" data-img="image/kepureB.png">
+                  Į krepšelį
+                </button>
+              </div>
+              <div class="card-footer fw-bold">14,99€</div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- dydžių ir kainų lentelė -->
+<section>
+  <div class="container mt-4">
+        <h2>{{title}}</h2>
+        <p>{{subtitle}}</p>
+
+        <div class="table-responsive rounded-4">
+          <table class="table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Prekė</th>
+                <th>Dydžiai</th>
+                <th>Kaina</th>
+                <th>Sandėlyje</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{table_rows}}
+            </tbody>
+          </table>
+        </div>
+  </div>
+</section>
+
+
+
+    <!-- kontaktai -->
+  <section id="contacts" class="section pad light">
+  <div class="grid-2">
+    <div>
+      <h2 class="title-underline">Kontaktai</h2>
+      <ul class="contact-list">
+<li><strong>Nr.:</strong> {{company_phone}}</li>
+<li><strong>Gmail:</strong> {{company_email}}</li>
+<li><strong>Adresas:</strong> {{company_address}}</li>
+      </ul>
+    </div>
+
+    <div>
+   <form class="contact-form" id="contactForm" novalidate>
+  <label>Vardas
+    <input type="text" name="vardas" placeholder="Jūsų vardas" required>
+  </label>
+  <label>El. paštas
+    <input type="email" name="email" placeholder="email@pavyzdys.lt" required>
+  </label>
+  <label>Žinutė
+    <textarea name="zinute" rows="5" placeholder="Trumpa žinutė..." required></textarea>
+  </label>
+
+  <label class="check-wrap">
+    <input id="rules" type="checkbox" name="rules" required>
+    <span class="check-label">Sutinku su taisyklėmis</span>
+  </label>
+
+  <button class="btn btn-dark rounded-4 py-3 fw-bold" type="submit">Siųsti</button>
+</form>
+
+<h3 class="mt-4">Atsiliepimai</h3>
+<div id="feedback-table">
+  <!-- Atsiliepimai bus čia įkelti per AJAX -->
+</div>
+
+<script>
+// AJAX siuntimas ir atsiliepimų atnaujinimas
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // nesikrauna puslapis
+
+    let formData = new FormData(this);
+
+    fetch('DB.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('feedback-table').innerHTML = data;
+        document.getElementById('contactForm').reset(); // išvalo formą
+    })
+    .catch(err => console.error(err));
+});
+
+// Nuskaityti esamus atsiliepimus iš DB
+window.addEventListener('load', function() {
+    fetch('DB.php')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('feedback-table').innerHTML = data;
+        });
+});
+</script>
+
+
+
+
+      <div class="map-audio">
+        <div class="map-wrap">
+          <iframe
+            title="NightRiders lokacija"
+            src="https://www.google.com/maps?q=Vilnius&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+        <div class="audio-wrap">
+          <p>Nuotaikai pakelti:</p>
+          <audio controls>
+            <source src="image/muzika.mp3" type="audio/mpeg">
+            Jūsų naršyklė nepalaiko audio.
+          </audio>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- apačia -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-col logo-col">
+        <img src="image/logo.png" alt="NightRiders logotipas">
+        <p>Visos teisės priklauso nightriders.shop <span id="y"></span></p>
+      </div>
+      <div class="foot-col">
+        <h4>Meniu</h4>
+        <ul>
+          <li><a href="#hero">Pradinis</a></li>
+          <li><a href="#shop">Parduotuvė</a></li>
+          <li><a href="#about">Apie mus</a></li>
+          <li><a href="#contacts">Kontaktai</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Kontaktai</h4>
+        <ul>
+          <li>Nr.: {{company_phone}}</li>
+          <li>Gmail: {{company_email}}</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- krepšelio skydelis -->
+  <aside id="cartDrawer" class="drawer" aria-hidden="true" aria-labelledby="cartBtn">
+    <div class="drawer-head">
+      <h3>Krepšelis</h3>
+      <button class="drawer-close" aria-label="uždaryti">×</button>
+    </div>
+    <div id="cartItems" class="drawer-body"></div>
+    <div class="drawer-foot">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <span>Iš viso:</span>
+        <strong id="cartTotal">0,00 €</strong>
+      </div>
+      <button id="checkoutBtn" class="btn btn-dark w-100 rounded-4">Pirkti</button>
+    </div>
+  </aside>
+
+  <!-- prisijungimo skydelis -->
+  <aside id="loginDrawer" class="drawer" aria-hidden="true" aria-labelledby="loginBtn">
+    <div class="drawer-head">
+      <h3>Prisijungti</h3>
+      <button class="drawer-close" aria-label="uždaryti">×</button>
+    </div>
+    <div class="drawer-body">
+      <form id="loginForm" class="stack">
+        <label>El. paštas
+          <input type="email" placeholder="email@pavyzdys.lt" required>
+        </label>
+        <label>Slaptažodis
+          <input type="password" placeholder="********" required>
+        </label>
+        <button class="btn btn-dark rounded-4">Prisijungti</button>
+        <p class="muted small mt-2">Ši forma yra demonstracinė — duomenys nepersiunčiami į serverį.</p>
+      </form>
+    </div>
+  </aside>
+
+  <!-- lightbox (zoom) -->
+  <div id="lightbox" class="lightbox" hidden>
+    <img id="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Padidinta nuotrauka">
+  </div>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
